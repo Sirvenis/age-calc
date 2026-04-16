@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Age Calculator - Calculate Your Exact Age in Years, Months, Days | ExactAgeCalculator</title>
+    <meta name="description" content="Free age calculator. Find your exact age in years, months, days, hours, and minutes. Calculate date differences, days until birthday, and zodiac signs.">
+    <link rel="canonical" href="https://exactagecalculator.com/">
+    <meta property="og:title" content="Age Calculator - Calculate Your Exact Age">
+    <meta property="og:description" content="Find your exact age instantly. Date difference calculator, birthday countdown, and zodiac sign lookup.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://exactagecalculator.com/">
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Age Calculator","url":"https://exactagecalculator.com","description":"Free online age calculator to find exact age in years, months, days, hours, and minutes.","applicationCategory":"UtilityApplication","operatingSystem":"Web","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"}}</script>
+    <script type="application/ld+json">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is age calculated?","acceptedAnswer":{"@type":"Answer","text":"Age is calculated by finding the difference between your birth date and today's date (or a target date). The calculator accounts for varying month lengths and leap years to give exact results."}},{"@type":"Question","name":"How many days old am I?","acceptedAnswer":{"@type":"Answer","text":"Enter your birth date and the calculator will show your exact age in days, hours, and minutes in addition to years and months."}},{"@type":"Question","name":"How do I calculate the difference between two dates?","acceptedAnswer":{"@type":"Answer","text":"Use the Date Difference tab. Enter any two dates and the calculator will show the exact difference in years, months, days, and total days."}},{"@type":"Question","name":"When is my next birthday?","acceptedAnswer":{"@type":"Answer","text":"Enter your birth date and the calculator automatically shows how many days until your next birthday, along with what day of the week it falls on."}},{"@type":"Question","name":"What is my zodiac sign?","acceptedAnswer":{"@type":"Answer","text":"Enter your birth date and the calculator displays both your Western zodiac sign (based on month and day) and Chinese zodiac sign (based on birth year)."}},{"@type":"Question","name":"Does the calculator account for leap years?","acceptedAnswer":{"@type":"Answer","text":"Yes, the calculator fully accounts for leap years when calculating age and date differences."}},{"@type":"Question","name":"Can I calculate age for someone born in a different timezone?","acceptedAnswer":{"@type":"Answer","text":"The calculator uses your local date. For most purposes this is accurate. For legal or official age calculations, use the timezone and exact time of birth if required."}},{"@type":"Question","name":"Is this age calculator free?","acceptedAnswer":{"@type":"Answer","text":"Yes, this age calculator is completely free with no registration required. All calculations happen in your browser — no data is sent to any server."}}]}</script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--primary:#1a1a2e;--secondary:#16213e;--accent:#0f3460;--highlight:#e94560;--text:#eee;--text-muted:#aab;--bg-card:#1e2a4a;--bg-input:#0d1b3e;--success:#2ecc71;--warning:#f39c12}
+        body{font-family:'Segoe UI',system-ui,-apple-system,sans-serif;background:linear-gradient(135deg,var(--primary),var(--secondary));color:var(--text);min-height:100vh;line-height:1.7}
+        .container{max-width:900px;margin:0 auto;padding:20px}
+        header{text-align:center;padding:40px 20px 20px}
+        header h1{font-size:2.5em;background:linear-gradient(135deg,#e94560,#f39c12);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+        header p{color:var(--text-muted);font-size:1.1em;max-width:600px;margin:0 auto}
+        .nav-links{display:flex;justify-content:center;gap:20px;margin-top:20px;flex-wrap:wrap}
+        .nav-links a{color:var(--highlight);text-decoration:none;font-size:0.9em;padding:5px 15px;border:1px solid var(--highlight);border-radius:20px;transition:all .3s}
+        .nav-links a:hover{background:var(--highlight);color:#fff}
+        .tool-card{background:var(--bg-card);border-radius:16px;padding:30px;margin:25px 0;box-shadow:0 8px 32px rgba(0,0,0,.3)}
+        .tool-card h2{color:var(--highlight);margin-bottom:20px;font-size:1.4em}
+        .tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
+        .tab{padding:10px 20px;background:var(--bg-input);border:1px solid var(--accent);color:var(--text-muted);border-radius:8px;cursor:pointer;font-size:0.9em;transition:all .3s}
+        .tab.active{background:var(--highlight);border-color:var(--highlight);color:#fff}
+        .tab:hover{border-color:var(--highlight)}
+        .tab-panel{display:none}
+        .tab-panel.active{display:block;animation:fadeIn .3s ease}
+        @keyframes fadeIn{from{opacity:0}to{opacity:1}}
+        .input-row{display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:20px}
+        .input-group{display:flex;flex-direction:column;gap:6px}
+        .input-group label{color:var(--text-muted);font-size:0.9em}
+        .input-group input[type="date"]{padding:14px;background:var(--bg-input);border:2px solid var(--accent);color:var(--text);border-radius:10px;font-size:1.1em;outline:none;transition:border-color .3s;font-family:inherit}
+        .input-group input[type="date"]:focus{border-color:var(--highlight)}
+        .input-group input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1);cursor:pointer}
+        .calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,var(--highlight),#c0392b);color:#fff;border:none;border-radius:10px;font-size:1.2em;cursor:pointer;transition:transform .2s,box-shadow .2s;font-weight:600}
+        .calc-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(233,69,96,.4)}
+        .results{margin-top:25px;display:none}
+        .results.show{display:block;animation:fadeIn .5s ease}
+        .age-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:20px}
+        .age-card{background:var(--bg-input);padding:18px;border-radius:12px;text-align:center;border:1px solid var(--accent)}
+        .age-value{font-size:2em;font-weight:700;color:#fff}
+        .age-label{font-size:0.8em;color:var(--text-muted);margin-top:4px}
+        .age-card.highlight .age-value{color:var(--highlight);font-size:2.5em}
+        .detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+        .detail-card{background:var(--bg-input);padding:16px;border-radius:10px;border:1px solid var(--accent)}
+        .detail-title{color:var(--highlight);font-size:0.85em;font-weight:600;margin-bottom:6px}
+        .detail-value{color:#fff;font-size:1.1em}
+        .detail-sub{color:var(--text-muted);font-size:0.8em;margin-top:4px}
+        .zodiac-display{display:flex;align-items:center;gap:10px}
+        .zodiac-icon{font-size:1.8em}
+        .birthday-countdown{text-align:center;padding:25px;background:linear-gradient(135deg,var(--accent),var(--highlight));border-radius:12px;margin-top:15px}
+        .countdown-value{font-size:3em;font-weight:700;color:#fff}
+        .countdown-label{color:rgba(255,255,255,.8);font-size:1em;margin-top:5px}
+        .ad-slot{background:var(--bg-input);border:1px dashed var(--accent);border-radius:8px;padding:20px;text-align:center;color:var(--text-muted);font-size:0.8em;margin:25px 0;min-height:90px;display:flex;align-items:center;justify-content:center}
+        .content-section{background:var(--bg-card);border-radius:16px;padding:30px;margin:25px 0;box-shadow:0 4px 20px rgba(0,0,0,.2)}
+        .content-section h2{color:var(--highlight);margin-bottom:15px;font-size:1.4em}
+        .content-section h3{color:#fff;margin:20px 0 10px;font-size:1.1em}
+        .content-section p{color:var(--text-muted);margin-bottom:12px}
+        .content-section ul{color:var(--text-muted);margin-left:20px;margin-bottom:15px}
+        .content-section li{margin-bottom:8px}
+        .ref-table{width:100%;border-collapse:collapse;margin:15px 0}
+        .ref-table th,.ref-table td{padding:12px;text-align:left;border-bottom:1px solid var(--accent)}
+        .ref-table th{color:var(--highlight);font-weight:600}
+        .ref-table td{color:var(--text-muted)}
+        .faq-item{margin-bottom:12px;border:1px solid var(--accent);border-radius:10px;overflow:hidden}
+        .faq-q{padding:14px 18px;background:var(--bg-input);cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:600;transition:background .3s;font-size:0.95em}
+        .faq-q:hover{background:var(--accent)}
+        .faq-q::after{content:'+';font-size:1.3em;color:var(--highlight);transition:transform .3s}
+        .faq-item.open .faq-q::after{transform:rotate(45deg)}
+        .faq-a{padding:0 18px;max-height:0;overflow:hidden;transition:max-height .3s,padding .3s;color:var(--text-muted);font-size:0.9em}
+        .faq-item.open .faq-a{max-height:400px;padding:14px 18px}
+        .other-tools{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:15px}
+        .other-tools a{display:block;padding:12px;background:var(--bg-input);border:1px solid var(--accent);border-radius:8px;text-decoration:none;color:var(--text);text-align:center;font-size:0.9em;transition:all .3s}
+        .other-tools a:hover{border-color:var(--highlight);transform:translateY(-2px)}
+        footer{background:var(--primary);padding:30px 20px;margin-top:40px;text-align:center;border-top:1px solid var(--accent)}
+        footer p{color:var(--text-muted);font-size:0.85em;margin-bottom:5px}
+        footer a{color:var(--highlight);text-decoration:none}
+        @media(max-width:600px){header h1{font-size:1.8em}.input-row{grid-template-columns:1fr}.age-grid{grid-template-columns:repeat(3,1fr)}.age-value{font-size:1.4em}.age-card.highlight .age-value{font-size:1.7em}.tool-card{padding:20px}.detail-grid{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Age Calculator</h1>
+        <p>Calculate your exact age in years, months, days, hours, and minutes. Plus birthday countdown and zodiac signs.</p>
+        <nav class="nav-links">
+            <a href="#calculator">Calculator</a>
+            <a href="#zodiac-info">Zodiac</a>
+            <a href="#fun-facts">Fun Facts</a>
+            <a href="#faq">FAQ</a>
+        </nav>
+    </header>
+
+    <div class="container">
+        <div class="tool-card" id="calculator">
+            <h2>Calculate Your Age</h2>
+            <div class="tabs">
+                <button class="tab active" onclick="showTab('age',this)">Age Calculator</button>
+                <button class="tab" onclick="showTab('diff',this)">Date Difference</button>
+            </div>
+            <div class="tab-panel active" id="tab-age">
+                <div class="input-group" style="margin-bottom:20px">
+                    <label>Your Birth Date</label>
+                    <input type="date" id="birthdate">
+                </div>
+                <button class="calc-btn" onclick="calcAge()">Calculate My Age</button>
+            </div>
+            <div class="tab-panel" id="tab-diff">
+                <div class="input-row">
+                    <div class="input-group"><label>Start Date</label><input type="date" id="date1"></div>
+                    <div class="input-group"><label>End Date</label><input type="date" id="date2"></div>
+                </div>
+                <button class="calc-btn" onclick="calcDiff()">Calculate Difference</button>
+            </div>
+            <div class="results" id="results"></div>
+        </div>
+
+        <div class="ad-slot">Advertisement Space</div>
+
+        <div class="content-section" id="zodiac-info">
+            <h2>Zodiac Signs</h2>
+            <h3>Western Zodiac Signs</h3>
+            <table class="ref-table">
+                <thead><tr><th>Sign</th><th>Dates</th><th>Element</th></tr></thead>
+                <tbody>
+                    <tr><td>♈ Aries</td><td>Mar 21 - Apr 19</td><td>Fire</td></tr>
+                    <tr><td>♉ Taurus</td><td>Apr 20 - May 20</td><td>Earth</td></tr>
+                    <tr><td>♊ Gemini</td><td>May 21 - Jun 20</td><td>Air</td></tr>
+                    <tr><td>♋ Cancer</td><td>Jun 21 - Jul 22</td><td>Water</td></tr>
+                    <tr><td>♌ Leo</td><td>Jul 23 - Aug 22</td><td>Fire</td></tr>
+                    <tr><td>♍ Virgo</td><td>Aug 23 - Sep 22</td><td>Earth</td></tr>
+                    <tr><td>♎ Libra</td><td>Sep 23 - Oct 22</td><td>Air</td></tr>
+                    <tr><td>♏ Scorpio</td><td>Oct 23 - Nov 21</td><td>Water</td></tr>
+                    <tr><td>♐ Sagittarius</td><td>Nov 22 - Dec 21</td><td>Fire</td></tr>
+                    <tr><td>♑ Capricorn</td><td>Dec 22 - Jan 19</td><td>Earth</td></tr>
+                    <tr><td>♒ Aquarius</td><td>Jan 20 - Feb 18</td><td>Air</td></tr>
+                    <tr><td>♓ Pisces</td><td>Feb 19 - Mar 20</td><td>Water</td></tr>
+                </tbody>
+            </table>
+            <h3>Chinese Zodiac</h3>
+            <p>The Chinese zodiac operates on a 12-year cycle, with each year associated with an animal: Rat, Ox, Tiger, Rabbit, Dragon, Snake, Horse, Goat, Monkey, Rooster, Dog, and Pig. Your Chinese zodiac sign is determined by your birth year.</p>
+        </div>
+
+        <div class="content-section" id="fun-facts">
+            <h2>Fun Age Facts</h2>
+            <ul>
+                <li>The average human lifespan is approximately 73 years (26,660 days)</li>
+                <li>By age 30, your heart will have beaten approximately 1 billion times</li>
+                <li>You blink about 15-20 times per minute — that's roughly 28,800 blinks per day</li>
+                <li>Your bones fully stop growing around age 25</li>
+                <li>The brain reaches its peak development around age 25</li>
+                <li>You spend about 26 years of your life sleeping (roughly 1/3 of your life)</li>
+                <li>Around 4.3 babies are born every second worldwide</li>
+            </ul>
+        </div>
+
+        <div class="ad-slot">Advertisement Space</div>
+
+        <div class="content-section" id="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How is age calculated?</div><div class="faq-a">Age is calculated by finding the difference between your birth date and today's date (or a target date). The calculator accounts for varying month lengths and leap years to give exact results.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many days old am I?</div><div class="faq-a">Enter your birth date and the calculator will show your exact age in days, hours, and minutes in addition to years and months.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I calculate the difference between two dates?</div><div class="faq-a">Use the Date Difference tab. Enter any two dates and the calculator will show the exact difference in years, months, days, and total days.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">When is my next birthday?</div><div class="faq-a">Enter your birth date and the calculator automatically shows how many days until your next birthday, along with what day of the week it falls on.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">What is my zodiac sign?</div><div class="faq-a">Enter your birth date and the calculator displays both your Western zodiac sign (based on month and day) and Chinese zodiac sign (based on birth year).</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Does the calculator account for leap years?</div><div class="faq-a">Yes, the calculator fully accounts for leap years when calculating age and date differences.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Can I calculate age for someone born in a different timezone?</div><div class="faq-a">The calculator uses your local date. For most purposes this is accurate. For legal or official age calculations, use the timezone and exact time of birth if required.</div></div>
+            <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Is this age calculator free?</div><div class="faq-a">Yes, this age calculator is completely free with no registration required. All calculations happen in your browser — no data is sent to any server.</div></div>
+        </div>
+
+        <div class="content-section">
+            <h2>Our Other Free Tools</h2>
+            <div class="other-tools">
+                <a href="https://sleepcyclecalculator.com/">Sleep Calculator</a>
+                <a href="https://quickpercentagecalc.com/">Percentage Calculator</a>
+                <a href="https://freewordcounter.io/">Word Counter</a>
+                <a href="https://colorcodeconverter.com/">Color Converter</a>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 ExactAgeCalculator.com — Free Online Age Calculator</p>
+        <p><a href="/privacy.html">Privacy Policy</a> | <a href="/terms.html">Terms of Service</a> | <a href="/about.html">About</a> | <a href="/contact.html">Contact</a></p>
+    </footer>
+
+    <script>
+        const zodiacs=[
+            {name:'Capricorn',icon:'♑',start:[12,22],end:[1,19]},
+            {name:'Aquarius',icon:'♒',start:[1,20],end:[2,18]},
+            {name:'Pisces',icon:'♓',start:[2,19],end:[3,20]},
+            {name:'Aries',icon:'♈',start:[3,21],end:[4,19]},
+            {name:'Taurus',icon:'♉',start:[4,20],end:[5,20]},
+            {name:'Gemini',icon:'♊',start:[5,21],end:[6,20]},
+            {name:'Cancer',icon:'♋',start:[6,21],end:[7,22]},
+            {name:'Leo',icon:'♌',start:[7,23],end:[8,22]},
+            {name:'Virgo',icon:'♍',start:[8,23],end:[9,22]},
+            {name:'Libra',icon:'♎',start:[9,23],end:[10,22]},
+            {name:'Scorpio',icon:'♏',start:[10,23],end:[11,21]},
+            {name:'Sagittarius',icon:'♐',start:[11,22],end:[12,21]}
+        ];
+        const chineseAnimals=['Rat','Ox','Tiger','Rabbit','Dragon','Snake','Horse','Goat','Monkey','Rooster','Dog','Pig'];
+        const chineseEmoji=['🐀','🐂','🐅','🐇','🐉','🐍','🐴','🐐','🐒','🐓','🐕','🐖'];
+        const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+
+        function getZodiac(m,d){for(const z of zodiacs){if(m===z.start[0]&&d>=z.start[1]||m===z.end[0]&&d<=z.end[1])return z;if(m>z.start[0]&&m<z.end[0])return z}return zodiacs[0]}
+        function getChineseZodiac(y){const idx=(y-1900)%12;return{animal:chineseAnimals[idx],emoji:chineseEmoji[idx]}}
+
+        function showTab(name,btn){
+            document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+            btn.classList.add('active');
+            document.getElementById('tab-'+name).classList.add('active');
+            document.getElementById('results').classList.remove('show');
+        }
+
+        function calcAge(){
+            const bd=document.getElementById('birthdate').value;
+            if(!bd)return alert('Please select a birth date');
+            const birth=new Date(bd+'T00:00:00');
+            const now=new Date();
+            if(birth>now)return alert('Birth date cannot be in the future');
+            let years=now.getFullYear()-birth.getFullYear();
+            let months=now.getMonth()-birth.getMonth();
+            let days=now.getDate()-birth.getDate();
+            if(days<0){months--;const prev=new Date(now.getFullYear(),now.getMonth(),0);days+=prev.getDate()}
+            if(months<0){years--;months+=12}
+            const totalMs=now-birth;
+            const totalDays=Math.floor(totalMs/86400000);
+            const totalHours=Math.floor(totalMs/3600000);
+            const totalMinutes=Math.floor(totalMs/60000);
+            const totalSeconds=Math.floor(totalMs/1000);
+            // Next birthday
+            let nextBday=new Date(now.getFullYear(),birth.getMonth(),birth.getDate());
+            if(nextBday<=now)nextBday=new Date(now.getFullYear()+1,birth.getMonth(),birth.getDate());
+            const daysToBday=Math.ceil((nextBday-now)/86400000);
+            // Zodiac
+            const zodiac=getZodiac(birth.getMonth()+1,birth.getDate());
+            const cz=getChineseZodiac(birth.getFullYear());
+            // Build HTML
+            let html='<div class="age-grid">';
+            html+=`<div class="age-card highlight"><div class="age-value">${years}</div><div class="age-label">Years</div></div>`;
+            html+=`<div class="age-card"><div class="age-value">${months}</div><div class="age-label">Months</div></div>`;
+            html+=`<div class="age-card"><div class="age-value">${days}</div><div class="age-label">Days</div></div>`;
+            html+='</div>';
+            html+='<div class="detail-grid">';
+            html+=`<div class="detail-card"><div class="detail-title">Total Days Alive</div><div class="detail-value">${totalDays.toLocaleString()}</div></div>`;
+            html+=`<div class="detail-card"><div class="detail-title">Total Hours Alive</div><div class="detail-value">${totalHours.toLocaleString()}</div></div>`;
+            html+=`<div class="detail-card"><div class="detail-title">Total Minutes Alive</div><div class="detail-value">${totalMinutes.toLocaleString()}</div></div>`;
+            html+=`<div class="detail-card"><div class="detail-title">Day of Birth</div><div class="detail-value">${days[birth.getDay()]}</div></div>`;
+            html+=`<div class="detail-card"><div class="detail-title">Western Zodiac</div><div class="detail-value"><span class="zodiac-display"><span class="zodiac-icon">${zodiac.icon}</span> ${zodiac.name}</span></div></div>`;
+            html+=`<div class="detail-card"><div class="detail-title">Chinese Zodiac</div><div class="detail-value"><span class="zodiac-display"><span class="zodiac-icon">${cz.emoji}</span> ${cz.animal}</span></div></div>`;
+            html+='</div>';
+            html+=`<div class="birthday-countdown"><div class="countdown-value">${daysToBday}</div><div class="countdown-label">days until your next birthday (${days[nextBday.getDay()]}, ${nextBday.toLocaleDateString('en-US',{month:'long',day:'numeric'})})</div></div>`;
+            const r=document.getElementById('results');
+            r.innerHTML=html;
+            r.classList.add('show');
+            r.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+
+        function calcDiff(){
+            const d1=document.getElementById('date1').value;
+            const d2=document.getElementById('date2').value;
+            if(!d1||!d2)return alert('Please select both dates');
+            const date1=new Date(d1+'T00:00:00');
+            const date2=new Date(d2+'T00:00:00');
+            const[early,late]=date1<date2?[date1,date2]:[date2,date1];
+            let years=late.getFullYear()-early.getFullYear();
+            let months=late.getMonth()-early.getMonth();
+            let days=late.getDate()-early.getDate();
+            if(days<0){months--;const prev=new Date(late.getFullYear(),late.getMonth(),0);days+=prev.getDate()}
+            if(months<0){years--;months+=12}
+            const totalDays=Math.floor((late-early)/86400000);
+            const totalWeeks=Math.floor(totalDays/7);
+            let html='<div class="age-grid">';
+            html+=`<div class="age-card highlight"><div class="age-value">${years}</div><div class="age-label">Years</div></div>`;
+            html+=`<div class="age-card"><div class="age-value">${months}</div><div class="age-label">Months</div></div>`;
+            html+=`<div class="age-card"><div class="age-value">${days}</div><div class="age-label">Days</div></div>`;
+            html+='</div>';
+            html+='<div class="detail-grid">';
+            html+=`<div class="detail-card"><div class="detail-title">Total Days</div><div class="detail-value">${totalDays.toLocaleString()}</div></div>`;
+            html+=`<div class="detail-card"><div class="detail-title">Total Weeks</div><div class="detail-value">${totalWeeks.toLocaleString()}</div></div>`;
+            html+=`<div class="detail-card"><div class="detail-title">Total Hours</div><div class="detail-value">${(totalDays*24).toLocaleString()}</div></div>`;
+            html+='</div>';
+            const r=document.getElementById('results');
+            r.innerHTML=html;
+            r.classList.add('show');
+            r.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+
+        function toggleFaq(el){el.parentElement.classList.toggle('open')}
+    </script>
+</body>
+</html>
