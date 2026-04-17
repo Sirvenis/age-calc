@@ -432,5 +432,50 @@
 
         function toggleFaq(el){el.parentElement.classList.toggle('open')}
     </script>
-</body>
+
+    <script>
+    // Simple On This Day display
+    (function() {
+        const events = {
+            "4-16": [
+                "1862 - Slavery abolished in Washington, D.C.",
+                "1912 - Harriet Quimby becomes first woman to fly English Channel",
+                "1947 - Texas City disaster: Ship explosion kills nearly 600",
+                "1963 - Martin Luther King Jr. writes Letter from Birmingham Jail",
+                "1972 - Apollo 16 launches to the Moon",
+                "2003 - Human Genome Project completed"
+            ],
+            "4-17": [
+                "1492 - Christopher Columbus signs contract with Spain",
+                "1790 - Benjamin Franklin dies at age 84",
+                "1961 - Bay of Pigs invasion of Cuba",
+                "1970 - Apollo 13 returns safely to Earth",
+                "1975 - Phnom Penh falls to Khmer Rouge"
+            ]
+        };
+        
+        const today = new Date();
+        const key = (today.getMonth()+1) + "-" + today.getDate();
+        const monthNames = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+        
+        // Update the date
+        const dateEl = document.getElementById("on-this-day-date");
+        if (dateEl) {
+            dateEl.textContent = "📅 " + monthNames[today.getMonth()] + " " + today.getDate() + ", " + today.getFullYear();
+        }
+        
+        // Update the content
+        const contentEl = document.getElementById("on-this-day-content");
+        if (contentEl && events[key]) {
+            let html = '<h3 style="color:#fff;margin:15px 0 10px">Historical Events</h3>';
+            html += '<ul style="color:#aab;margin-left:20px">';
+            events[key].forEach(function(event) {
+                html += '<li style="margin-bottom:8px">' + event + '</li>';
+            });
+            html += '</ul>';
+            contentEl.innerHTML = html;
+        }
+    })();
+    </script>
+    </body>
 </html>
