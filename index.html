@@ -170,7 +170,126 @@
         <div class="ad-slot">Advertisement Space</div>
 
         <div class="content-section" id="faq">
-            <h2>Frequently Asked Questions</h2>
+            
+    <!-- On This Day Section -->
+    <div class="content-section" id="on-this-day">
+        <h2>📰 On This Day in History</h2>
+        <p id="on-this-day-date" style="color:#4dabf7;font-weight:600;margin-bottom:15px"></p>
+        <div id="on-this-day-content"></div>
+    </div>
+
+    <script>
+    // Historical events database - can be expanded
+    const historicalEvents = {
+        "1-1": ["1863 - Abraham Lincoln issues Emancipation Proclamation", "1959 - First lunar probe launched"],
+        "1-2": ["1492 - Spain recaptures Granada from Moors", "1959 - Luna 1 launched"],
+        // Add more dates as needed...
+        "4-17": [
+            "1492 - Christopher Columbus signs contract with Spain to find the Indies",
+            "1534 - Thomas More confined in Tower of London",
+            "1610 - Henry Hudson departs London on fatal voyage to find Northwest Passage",
+            "1790 - Benjamin Franklin dies in Philadelphia at age 84",
+            "1861 - American Civil War begins with Confederate attack on Fort Sumter",
+            "1961 - Bay of Pigs invasion of Cuba begins",
+            "1964 - Jerrie Mock becomes first woman to fly solo around the world",
+            "1970 - Apollo 13 returns safely to Earth after oxygen tank explosion",
+            "1975 - Phnom Penh falls to Khmer Rouge in Cambodia",
+            "1986 - World's longest war (335 years) ends without a shot fired",
+            "1993 - Two police officers convicted of violating Rodney King's civil rights"
+        ],
+        "4-18": [
+            "1775 - Paul Revere's midnight ride begins",
+            "1906 - San Francisco earthquake strikes",
+            "1923 - Yankee Stadium opens"
+        ],
+        "4-19": [
+            "1775 - American Revolution begins at Lexington and Concord",
+            "1943 - Warsaw Ghetto Uprising begins",
+            "1995 - Oklahoma City bombing occurs"
+        ]
+        // Add more dates as needed...
+    };
+
+    // Newspaper headlines database
+    const newspaperHeadlines = {
+        "4-17": [
+            { year: "1961", headline: "BAY OF PIGS: CIA-BACKED INVASION OF CUBA FAILS", source: "Washington Post" },
+            { year: "1970", headline: "APOLLO 13 CREW RETURNS SAFELY TO EARTH", source: "New York Times" },
+            { year: "1975", headline: "FALL OF PHNOM PENH: KHMER ROUGE TAKE CONTROL", source: "Los Angeles Times" },
+            { year: "1986", headline: "WORLD'S LONGEST WAR ENDS PEACEFULLY", source: "The Guardian" }
+        ],
+        "4-18": [
+            { year: "1906", headline: "SAN FRANCISCO DESTROYED BY EARTHQUAKE AND FIRE", source: "San Francisco Chronicle" }
+        ],
+        "4-19": [
+            { year: "1775", headline: "THE SHOT HEARD ROUND THE WORLD", source: "Boston Gazette" },
+            { year: "1995", headline: "OKLAHOMA CITY BOMBING KILLS 168", source: "Daily Oklahoman" }
+        ]
+    };
+
+    function displayOnThisDay() {
+        const today = new Date();
+        const month = today.getMonth() + 1;
+        const day = today.getDate();
+        const dateKey = month + "-" + day;
+        
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+                          "July", "August", "September", "October", "November", "December"];
+        
+        // Display date
+        document.getElementById("on-this-day-date").textContent = 
+            "📅 " + monthNames[month-1] + " " + day + ", " + today.getFullYear();
+        
+        let html = "";
+        
+        // Historical Events
+        if (historicalEvents[dateKey]) {
+            html += '<h3 style="color:#fff;margin:15px 0 10px">Historical Events</h3>';
+            html += '<ul style="color:#aab;margin-left:20px">';
+            historicalEvents[dateKey].forEach(event => {
+                html += '<li style="margin-bottom:8px">' + event + '</li>';
+            });
+            html += '</ul>';
+        }
+        
+        // Newspaper Headlines
+        if (newspaperHeadlines[dateKey]) {
+            html += '<h3 style="color:#fff;margin:15px 0 10px">Front Page Headlines</h3>';
+            newspaperHeadlines[dateKey].forEach(item => {
+                html += '<div style="background:#0d1b3e;padding:12px;border-radius:8px;margin-bottom:10px;border-left:3px solid #e94560">';
+                html += '<div style="color:#e94560;font-size:0.85em;margin-bottom:5px">' + item.year + ' — ' + item.source + '</div>';
+                html += '<div style="color:#fff;font-weight:600">' + item.headline + '</div>';
+                html += '</div>';
+            });
+        }
+        
+        // If no events for today
+        if (!historicalEvents[dateKey] && !newspaperHeadlines[dateKey]) {
+            html = '<p style="color:#aab">No major historical events recorded for this date.</p>';
+        }
+        
+        // Fun fact about today
+        html += '<div style="background:#1e3a20;padding:15px;border-radius:8px;margin-top:20px;border:1px solid #4caf50">';
+        html += '<h3 style="color:#4caf50;margin-bottom:10px">🎯 Fun Fact</h3>';
+        html += '<p style="color:#a5d6a7">You were born on the ' + getDayOfYear(today) + 'th day of the year. ';
+        html += 'There are ' + (365 - getDayOfYear(today)) + ' days left until your next birthday!</p>';
+        html += '</div>';
+        
+        document.getElementById("on-this-day-content").innerHTML = html;
+    }
+
+    function getDayOfYear(date) {
+        const start = new Date(date.getFullYear(), 0, 0);
+        const diff = date - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        return Math.floor(diff / oneDay);
+    }
+
+    // Display on page load
+    document.addEventListener("DOMContentLoaded", displayOnThisDay);
+    </script>
+
+<h2>Frequently Asked Questions</h2>
             <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How is age calculated?</div><div class="faq-a">Age is calculated by finding the difference between your birth date and today's date (or a target date). The calculator accounts for varying month lengths and leap years to give exact results.</div></div>
             <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How many days old am I?</div><div class="faq-a">Enter your birth date and the calculator will show your exact age in days, hours, and minutes in addition to years and months.</div></div>
             <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">How do I calculate the difference between two dates?</div><div class="faq-a">Use the Date Difference tab. Enter any two dates and the calculator will show the exact difference in years, months, days, and total days.</div></div>
